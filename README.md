@@ -149,6 +149,42 @@ docs/
 
 ---
 
+## Distribuição (executável Windows)
+
+### Pré-requisito: ícone
+
+Coloque o arquivo `icon.ico` na raiz do projeto antes de gerar o executável.
+
+### Build manual
+
+```bash
+pip install pyinstaller
+pyinstaller ConferenciaXMLIBSCBS.spec
+# Executável gerado em: dist/ConferenciaXMLIBSCBS.exe
+```
+
+### CI/CD — GitHub Actions
+
+O workflow `.github/workflows/release.yml` gera e publica o executável automaticamente.
+
+**Como disparar um release:**
+
+```bash
+git tag v1.0.0
+git push origin v1.0.0
+```
+
+O pipeline irá:
+
+1. Fazer checkout do código no runner `windows-latest`
+2. Instalar Python 3.12, dependências e PyInstaller
+3. Executar `pyinstaller ConferenciaXMLIBSCBS.spec`
+4. Criar uma GitHub Release com o `ConferenciaXMLIBSCBS.exe` como asset e release notes geradas automaticamente
+
+> O `GITHUB_TOKEN` é fornecido automaticamente pelo GitHub — nenhuma configuração adicional de segredos é necessária.
+
+---
+
 ## Dependências
 
 | Pacote | Versão |

@@ -1,4 +1,5 @@
 from __future__ import annotations
+import sys
 import threading
 from pathlib import Path
 from tkinter import filedialog, messagebox
@@ -21,15 +22,28 @@ _COR_AVISO   = "#d4a017"
 _COR_NEUTRO  = "#888888"
 
 
+def _resource_path(relativo: str) -> Path:
+    """Retorna o caminho absoluto do recurso, compatível com PyInstaller."""
+    base = Path(getattr(sys, "_MEIPASS", Path(__file__).parent.parent.parent))
+    return base / relativo
+
+
 class App(ctk.CTk):
     def __init__(self) -> None:
         super().__init__()
         self.title("Validador IBS/CBS — NF-e  |  NT 2025.002 v1.30")
         self.geometry("1150x720")
         self.minsize(960, 620)
+        self._aplicar_icone()
 
         self._resultados: list[ResultadoArquivo] = []
         self._construir_layout()
+
+    def _aplicar_icone(self) -> None:
+        if sys.platform == "win32":
+            icone = _resource_path("icon.ico")
+            if icone.exists():
+                self.iconbitmap(str(icone))
 
     # ------------------------------------------------------------------ layout
 
