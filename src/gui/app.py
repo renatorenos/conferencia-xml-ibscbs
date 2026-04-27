@@ -7,6 +7,14 @@ import tkinter as tk
 
 import customtkinter as ctk
 
+if sys.platform == "win32":
+    import ctypes
+    # Garante que o Windows use o ícone da aplicação na barra de tarefas
+    # em vez do ícone do interpretador Python
+    ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(
+        "CATEC.ConferenciaXMLIBSCBS.1"
+    )
+
 from ..conciliacao import validar_diretorio
 from ..exporter import exportar_csv
 from ..models import ResultadoArquivo
@@ -38,6 +46,9 @@ class App(ctk.CTk):
 
         self._resultados: list[ResultadoArquivo] = []
         self._construir_layout()
+        # after() garante que o ícone é aplicado DEPOIS do CTk terminar
+        # sua própria inicialização, evitando que ele sobrescreva o ícone
+        self.after(0, self._aplicar_icone)
 
     def _aplicar_icone(self) -> None:
         if sys.platform == "win32":
